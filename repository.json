@@ -1,0 +1,6 @@
+{
+    "name": "Traccar (adrianmo's fork)",
+    "description": "Fork of the Traccar official addon, downgraded to v0.12.0 to support 32-bit systems.",
+    "url": "https://github.com/adrianmo/addon-traccar",
+    "maintainer": "adrianmo"
+}
