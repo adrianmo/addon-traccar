@@ -27,7 +27,7 @@ RUN set -ex \
     && apt-get update \
     \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        wget=1.21.3-1+b2 \
+        wget \
         nginx=1.22.1-9 \
         mariadb-client=1:10.11.6-0+deb12u1 \
         xmlstarlet=1.6.1-3 \
