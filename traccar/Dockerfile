@@ -9,12 +9,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Setup base system
 ARG BUILD_ARCH=amd64
 
-# Copy root filesystem
-COPY rootfs /
-
 # Set working dir
 WORKDIR /opt/traccar
-
 
 ENV JAVA_HOME /opt/java/openjdk
 ENV PATH $JAVA_HOME/bin:$PATH
@@ -28,6 +24,9 @@ RUN set -eux; \
     # curl required for historical reasons, see https://github.com/adoptium/containers/issues/255
     curl \
     wget \
+    nginx \
+    mariadb-client \
+    xmlstarlet \
     # java.lang.UnsatisfiedLinkError: libfontmanager.so: libfreetype.so.6: cannot open shared object file: No such file or directory
     # java.lang.NoClassDefFoundError: Could not initialize class sun.awt.X11FontManager
     # https://github.com/docker-library/openjdk/pull/235#issuecomment-424466077
@@ -42,6 +41,9 @@ RUN set -eux; \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen; \
     locale-gen en_US.UTF-8; \
     rm -rf /var/lib/apt/lists/*
+
+# Copy root filesystem
+COPY rootfs /
 
 ENV JAVA_VERSION jdk-11.0.22+7
 
@@ -96,7 +98,7 @@ ARG TRACCAR_VERSION="v5.12"
 
 RUN set -ex && \
     apt-get update &&\
-    TERM=xterm DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends unzip wget mariadb-client nginx xmlstarlet && \
+    TERM=xterm DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends unzip wget && \
     wget -qO /tmp/traccar.zip "https://github.com/traccar/traccar/releases/download/${TRACCAR_VERSION}/traccar-other-${TRACCAR_VERSION#v}.zip" && \
     unzip -qo /tmp/traccar.zip -d /opt/traccar && \
     apt-get autoremove --yes unzip wget && \
